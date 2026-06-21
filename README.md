@@ -1,7 +1,6 @@
 # ABFIA-Cormorant
 Antibrouillage spatial adaptatif en radar en utilisant un réseau de neurone.
 
-Introduction
 Les théâtres d'opérations militaires contemporains sont caractérisés par une augmentation critique de la densité électromagnétique. Les tensions
 internationales actuelles placent le brouillage de radar au centre des conflits, faisant de la maîtrise de cet environnement un facteur clé de
 la supériorité tactique. Les forces adverses déploient désormais des techniques de brouillage intentionnel ou non intentionnel conçues
