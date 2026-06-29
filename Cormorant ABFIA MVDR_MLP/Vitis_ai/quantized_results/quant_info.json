@@ -1,0 +1,32 @@
+{
+  "param":
+  {
+    "MVDR_FFNN::layer1.weight":[[8,8]],
+    "MVDR_FFNN::layer1.bias":[[8,9]],
+    "MVDR_FFNN::layer2.weight":[[8,6]],
+    "MVDR_FFNN::layer2.bias":[[8,10]],
+    "MVDR_FFNN::layer3.weight":[[8,6]],
+    "MVDR_FFNN::layer3.bias":[[8,9]],
+    "MVDR_FFNN::layer4.weight":[[8,7]],
+    "MVDR_FFNN::layer4.bias":[[8,9]],
+    "MVDR_FFNN::layer5.weight":[[8,8]],
+    "MVDR_FFNN::layer5.bias":[[8,9]]
+  },
+  "output":
+  {
+    "MVDR_FFNN::nndct_input_0":[[8,7]],
+    "MVDR_FFNN::nndct_leaky_relu_2":[[8,8]],
+    "MVDR_FFNN::nndct_leaky_relu_4":[[8,7]],
+    "MVDR_FFNN::nndct_leaky_relu_6":[[8,8]],
+    "MVDR_FFNN::nndct_leaky_relu_8":[[8,8]],
+    "MVDR_FFNN::nndct_dense_9":[[8,8]]
+  },
+  "input":
+  {
+
+  },
+  "fast_finetuned":false,
+  "bias_corrected":true,
+  "version":"3.5.0+60df3f1+torch1.13.1",
+  "graph_md5":"31bc464b1e5a2779349e2145bd0bb5f3"
+}

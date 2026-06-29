@@ -1,0 +1,685 @@
+commandes Vitis AI FINN et retour console
+
+ssh -X e2405238@davinci-3.univ-ubs.fr
+e2405238@davinci-3:/home/e2405238/Vitis-AI$ ./docker_run.sh xilinx/vitis-ai-pytorch-cpu:latest
+touch: impossible de faire un touch '.confirm': Permission non accordée
+latest: Pulling from xilinx/vitis-ai-pytorch-cpu
+Digest: sha256:baf43fd9d6e1ea5a2c12b727ac3aafd15ead936172bcd636d7af98b0cca49298
+Status: Image is up to date for xilinx/vitis-ai-pytorch-cpu:latest
+docker.io/xilinx/vitis-ai-pytorch-cpu:latest
+Setting up e2405238 's environment in the Docker container...
+cd
+cd 
+Running as vitis-ai-user with ID 0 and group 0 
+
+
+==========================================
+ 
+__      ___ _   _                   _____
+\ \    / (_) | (_)            /\   |_   _|
+ \ \  / / _| |_ _ ___ ______ /  \    | |
+  \ \/ / | | __| / __|______/ /\ \   | |
+   \  /  | | |_| \__ \     / ____ \ _| |
+    \/   |_|\__|_|___/    /_/    \_\_____|
+ 
+==========================================
+
+Docker Image Version: ubuntu2004-3.5.0.306   (CPU) 
+Vitis AI Git Hash: 6a9757a 
+Build Date: 2023-06-26
+WorkFlow: pytorch
+
+vitis-ai-user@davinci-3:/workspace$ 
+vitis-ai-user@davinci-3:/workspace/abfia/MVDR_MLP/Vitis_ai$ conda activate vitis-ai-pytorch
+
+# Lance-le
+jupyter notebook --ip=0.0.0.0 --no-browser --allow-root
+
+(vitis-ai-pytorch) vitis-ai-user@davinci-3:/workspace/abfia/MVDR_MLP/Vitis_ai$ vai_c_xir -a /opt/vitis_ai/compiler/arch/DPUCZDX8G/KV260/arch.json -x quantized_results/MVDR_FFNN_int.xmodel 
+
+vai_c_xir -a /opt/vitis_ai/compiler/arch/DPUCZDX8G/KV260/arch.json -x qat_results/MVDR_FFNN_0_int.xmodel 
+
+**************************************************
+* VITIS_AI Compilation - Xilinx Inc.
+**************************************************
+[UNILOG][INFO] Compile mode: dpu
+[UNILOG][INFO] Debug mode: null
+[UNILOG][INFO] Target architecture: DPUCZDX8G_ISA1_B4096
+[UNILOG][INFO] Graph name: MVDR_FFNN, with op num: 36
+[UNILOG][INFO] Begin to compile...
+[UNILOG][INFO] Total device subgraph number 3, DPU subgraph number 1
+[UNILOG][INFO] Compile done.
+[UNILOG][INFO] The meta json is saved to "/workspace/abfia/MVDR_MLP/Vitis_ai/./meta.json"
+[UNILOG][INFO] The compiled xmodel is saved to "/workspace/abfia/MVDR_MLP/Vitis_ai/.//deploy.xmodel"
+[UNILOG][INFO] The compiled xmodel's md5sum is 1769e48ddf50d8ad1e5d25a3e092431d, and has been saved to "/workspace/abfia/MVDR_MLP/Vitis_ai/./md5sum.txt"
+
+
+
+===========================================================================
+===========================================================================
+sudo putty /dev/ttyUSB1 -serial -sercfg 115200,8,n,1,N
+export http_proxy=http://squidlo.univ-ubs.fr:3128
+ping squidlo.univ-ubs.fr
+http://172.18.2.124:9090/lab/tree/pynq-dpu/abfia/Untitled.ipynb
+
+Note:
+Bien que le DPU CZDX8G soit optimisé pour les architectures convolutionnelles, 
+il traite efficacement les réseaux de type MLP (Multi-Layer Perceptron) utilisés 
+pour le Beamforming MVDR. Les couches Fully Connected sont transformées par le 
+compilateur Vitis AI en opérations de produit scalaire hautement parallélisées, 
+bénéficiant de l'accélération matérielle INT8 du DPU.
+
+(vitis-ai-pytorch) vitis-ai-user@davinci-3:/workspace/Abfia_cormorant/MVDR_MLP/Codes$ python3 NN_QAT.py
+No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+
+[VAIQ_NOTE]: Loading NNDCT kernels...
+Poids normalisés. Nouvelle norme moyenne : 2.50
+torch.Size([400000, 3])
+torch.Size([400000, 32])
+cpu
+MVDR_FFNN(
+  (quant): QuantStub()
+  (layer1): Linear(in_features=3, out_features=512, bias=True)
+  (layer2): Linear(in_features=512, out_features=1024, bias=True)
+  (layer3): Linear(in_features=1024, out_features=2048, bias=True)
+  (layer4): Linear(in_features=2048, out_features=1024, bias=True)
+  (layer5): Linear(in_features=1024, out_features=32, bias=True)
+  (relu1): LeakyReLU(negative_slope=0.1015625)
+  (relu2): LeakyReLU(negative_slope=0.1015625)
+  (relu3): LeakyReLU(negative_slope=0.1015625)
+  (relu4): LeakyReLU(negative_slope=0.1015625)
+  (dequant): DeQuantStub()
+)
+
+[VAIQ_WARN][QUANTIZER_TORCH_DEPRECATED_ARGUMENT]: The argument "device" is no longer used and will be ignored.
+
+[VAIQ_NOTE]: Quant config file is empty, use default quant configuration
+
+[VAIQ_NOTE]: Quantization calibration process start up...
+
+[VAIQ_NOTE]: =>Quant Module is in 'cpu'.
+
+[VAIQ_NOTE]: =>Parsing MVDR_FFNN...
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+██████████████████████████████████████████████████| 13/13 [00:00<00:00, 4227.15it/s, OpInfo: name = return_0, type = Return]              
+
+[VAIQ_NOTE]: =>Quantizable module is generated.(.vai_qat/MVDR_FFNN.py)
+
+[VAIQ_NOTE]: =>Exporting quant config.(.vai_qat/quant_info.json)
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+
+--------------------------------------------------
+ ENTRAÎNEMENT TERMINÉ
+ TEMPS TOTAL : 7:01:08 (HH:MM:SS)
+Conversion vers le modèle déployable...
+
+[VAIQ_NOTE]: Quant config file is empty, use default quant configuration
+
+[VAIQ_NOTE]: Quantization test process start up...
+
+[VAIQ_NOTE]: =>Quant Module is in 'cpu'.
+
+[VAIQ_NOTE]: =>Parsing MVDR_FFNN...
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+██████████████████████████████████████████████████| 13/13 [00:00<00:00, 6969.06it/s, OpInfo: name = return_0, type = Return]                         
+
+[VAIQ_NOTE]: =>Quantizable module is generated.(.vai_qat/MVDR_FFNN.py)
+
+[VAIQ_NOTE]: =>Exporting quant config.(qat_results/test/quant_info.json)
+
+[VAIQ_NOTE]: =>Exporting quant config.(qat_results/quant_info.json)
+I0421 10:14:11.080519 quant_aware_training.py] Saving deployable model to qat_results/deployable.pth, and you can get it by calling "deployable_model()"
+Tracing du modèle...
+Génération du .xmodel...
+
+[VAIQ_NOTE]: =>Converting to xmodel ...
+
+[VAIQ_NOTE]: =>Successfully convert 'MVDR_FFNN_0' to xmodel.(qat_results/MVDR_FFNN_0_int.xmodel)
+Génération du .xmodel...
+
+[VAIQ_NOTE]: =>Converting to xmodel ...
+
+[VAIQ_NOTE]: =>Successfully convert 'MVDR_FFNN_0' to xmodel.(qat_results/MVDR_FFNN_0_int.xmodel)
+
+Fichiers générés : ['quant_info.json', 'deployable.pth', 'MVDR_FFNN_0_int.xmodel', 'test']
+
+ Test final sur l'ensemble de TEST (60000 échantillons)...
+Graphique sauvegardé : ../models_FFNN_Quantifie/QAT_512-1024-2048-1024_Loss_20260421_0313.png
+------------------------------------------------------------
+ RÉSULTATS DU TEST FINAL (SIMULATION INT8 VIA QAT)
+ RMSE Moyenne : 0.01672998
+ MSE Moyenne  : 2.79892139e-04
+🔹 Score de fidélité estimé : 98.33%
+------------------------------------------------------------
+
+
+(vitis-ai-pytorch) vitis-ai-user@davinci-3:/workspace/Abfia_cormorant/MVDR_MLP/Codes$ python3 NN_QAT.py
+No CUDA runtime is found, using CUDA_HOME='/usr/local/cuda'
+
+[VAIQ_NOTE]: Loading NNDCT kernels...
+Poids normalisés. Nouvelle norme moyenne : 2.50
+torch.Size([400000, 3])
+torch.Size([400000, 32])
+cpu
+MVDR_FFNN(
+  (quant): QuantStub()
+  (layer1): Linear(in_features=3, out_features=512, bias=True)
+  (layer2): Linear(in_features=512, out_features=1024, bias=True)
+  (layer3): Linear(in_features=1024, out_features=2048, bias=True)
+  (layer4): Linear(in_features=2048, out_features=1024, bias=True)
+  (layer5): Linear(in_features=1024, out_features=32, bias=True)
+  (relu1): LeakyReLU(negative_slope=0.1015625)
+  (relu2): LeakyReLU(negative_slope=0.1015625)
+  (relu3): LeakyReLU(negative_slope=0.1015625)
+  (relu4): LeakyReLU(negative_slope=0.1015625)
+  (dequant): DeQuantStub()
+)
+
+[VAIQ_WARN][QUANTIZER_TORCH_DEPRECATED_ARGUMENT]: The argument "device" is no longer used and will be ignored.
+
+[VAIQ_NOTE]: Quant config file is empty, use default quant configuration
+
+[VAIQ_NOTE]: Quantization calibration process start up...
+
+[VAIQ_NOTE]: =>Quant Module is in 'cpu'.
+
+[VAIQ_NOTE]: =>Parsing MVDR_FFNN...
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+██████████████████████████████████████████████████| 13/13 [00:00<00:00, 4156.26it/s, OpInfo: name = return_0, type = Return]                            
+
+[VAIQ_NOTE]: =>Quantizable module is generated.(.vai_qat/MVDR_FFNN.py)
+
+[VAIQ_NOTE]: =>Exporting quant config.(.vai_qat/quant_info.json)
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+
+ ENTRAÎNEMENT TERMINÉ
+ TEMPS TOTAL : 10:24:08 (HH:MM:SS)
+Conversion vers le modèle déployable...
+
+[VAIQ_NOTE]: Quant config file is empty, use default quant configuration
+
+[VAIQ_NOTE]: Quantization test process start up...
+
+[VAIQ_NOTE]: =>Quant Module is in 'cpu'.
+
+[VAIQ_NOTE]: =>Parsing MVDR_FFNN...
+
+[VAIQ_NOTE]: Start to trace and freeze model...
+
+[VAIQ_NOTE]: The input model nndct_st_MVDR_FFNN_ed is torch.nn.Module.
+
+[VAIQ_NOTE]: Finish tracing.
+
+[VAIQ_NOTE]: Processing ops...
+██████████████████████████████████████████████████| 13/13 [00:00<00:00, 6893.29it/s, OpInfo: name = return_0, type = Return]                                
+
+[VAIQ_NOTE]: =>Quantizable module is generated.(.vai_qat/MVDR_FFNN.py)
+
+[VAIQ_NOTE]: =>Exporting quant config.(qat_results/test/quant_info.json)
+
+[VAIQ_NOTE]: =>Exporting quant config.(qat_results/quant_info.json)
+I0424 12:50:40.240600 quant_aware_training.py] Saving deployable model to qat_results/deployable.pth, and you can get it by calling "deployable_model()"
+Tracing du modèle...
+Génération du .xmodel...
+
+[VAIQ_NOTE]: =>Converting to xmodel ...
+
+[VAIQ_NOTE]: =>Successfully convert 'MVDR_FFNN_0' to xmodel.(qat_results/MVDR_FFNN_0_int.xmodel)
+Génération du .xmodel...
+
+[VAIQ_NOTE]: =>Converting to xmodel ...
+
+[VAIQ_NOTE]: =>Successfully convert 'MVDR_FFNN_0' to xmodel.(qat_results/MVDR_FFNN_0_int.xmodel)
+
+Fichiers générés : ['quant_info.json', 'deployable.pth', 'MVDR_FFNN_0_int.xmodel', 'test']
+
+ Test final sur l'ensemble de TEST (60000 échantillons)...
+Graphique sauvegardé : ../models_FFNN_Quantifie/QAT_512-1024-2048-1024_Loss_20260424_0226.png
+------------------------------------------------------------
+ RÉSULTATS DU TEST FINAL (SIMULATION INT8 VIA QAT)
+ RMSE Moyenne : 0.01421442
+ MSE Moyenne  : 2.02049869e-04
+🔹 Score de fidélité estimé : 98.58%
+------------------------------------------------------------
+[1]+  Done                    sudo chown -R vitis-ai-user /opt/vitis_ai/conda  (wd: /workspace)
+(wd now: /workspace/Abfia_cormorant/MVDR_MLP/Codes)
+(vitis-ai-pytorch) vitis-ai-user@davinci-3:/workspace/Abfia_cormorant/MVDR_MLP/Codes$ 
+
+=====================================================================================================================
+							FINN
+=====================================================================================================================
+
+
+e2405238@davinci-3:/home/e2405238$ source ~/.bashrc
+(base) e2405238@davinci-3:/home/e2405238/Vitis-AI.SAV/Vitis-AI/Abfia_cormorant/MVDR_MLP/Codes$ python3 Brevitas_QAT.py 
+
+La Solution : Forcer la désactivation du GPU
+
+Relance la commande en définissant la variable FINN_DOCKER_GPU à 0 juste avant l'exécution. Cela court-circuitera la détection NVIDIA qui fait planter ton Docker.
+
+Tape cette commande dans ton terminal :
+Bash
+ 
+I have no name!@finn_dev_e2405238:/home/e2405238/finn$ 
+
+FINN_XILINX_PATH=/home/e2405238/Xilinx FINN_XILINX_VERSION=2022.2 FINN_DOCKER_GPU=0 ./run-docker.sh
+
+source /home/e2405238/Xilinx/Vitis/2022.2/settings64.sh
+
+rm -rf /tmp/finn_dev_e2405238/*
+
+rm -rf output_mvdr_kr260
+
+ e2405238@davinci-3:/tmp/finn_dev_e2405238$ find -name "vitis_hls.log" 
+
+I have no name!@finn_dev_e2405238:/home/e2405238/finn/Abfia_cormorant$ python3 -c "from finn.util.basic import pynq_part_map; print(list(pynq_part_map.keys()))"
+['Ultra96', 'Ultra96-V2', 'Pynq-Z1', 'Pynq-Z2', 'ZCU102', 'ZCU104', 'ZCU111', 'RFSoC2x2', 'RFSoC4x2', 'KV260_SOM']
+I have no name!@finn_dev_e2405238:/home/e2405238/finn/Abfia_cormorant$ 
+
+python3 -c "from finn.util.basic import alveo_part_map; print(list(alveo_part_map.keys()))"
+I have no name!@finn_dev_e2405238:/home/e2405238/finn/Abfia_cormorant$ python3 -c "from finn.util.basic import alveo_part_map; print(list(alveo_part_map.keys()))"
+['U50', 'U200', 'U250', 'U280', 'U55C']
+
+
+==============================================================================================================================
+
+==============================================================================================================================
+
+(base) e2405238@davinci-3:/home/e2405238/Vitis-AI.SAV/Vitis-AI/Abfia_cormorant/MVDR_MLP/Codes$ python3 Brevitas_QAT.py 
+/lab/home/labsticc/e2405238/anaconda3/lib/python3.9/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.16.5 and <1.23.0 is required for this version of SciPy (detected version 1.26.4
+  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
+torch.Size([400000, 3])
+torch.Size([400000, 32])
+cuda
+ Début de l'entraînement à : 17:30:21
+Époque [1/300]:   0%|                                         | 0/547 [00:00<?, ?it/s]/lab/home/labsticc/e2405238/anaconda3/lib/python3.9/site-packages/torch/_tensor.py:1645: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at /pytorch/c10/core/TensorImpl.h:1939.)
+  return super().rename(names)
+                  
+--------------------------------------------------
+ ENTRAÎNEMENT TERMINÉ
+ TEMPS TOTAL : 0:54:46 (HH:MM:SS)
+--------------------------------------------------
+--------------------------------------------------
+ RÉSULTATS DU TEST FINAL (MODÈLE - INT16)
+ MSE Moyenne (Normalisée)  : 5.46266527e-05
+ RMSE Globale (Normalisée) : 0.00739098
+ Score de fidélité estimé   : 99.26%
+--------------------------------------------------
+
+e2405238@davinci-3:~/workspace/finn/Abfia_cormorant/output_mvdr_kr260$ tail -f /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/vivado.log
+top_rst_zynq_ps_100M_0_synth_1: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/top_rst_zynq_ps_100M_0_synth_1/runme.log
+top_idma0_0_synth_1: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/top_idma0_0_synth_1/runme.log
+top_StreamingDataflowPartition_1_0_synth_1: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/top_StreamingDataflowPartition_1_0_synth_1/runme.log
+top_odma0_0_synth_1: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/top_odma0_0_synth_1/runme.log
+synth_1: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/synth_1/runme.log
+[Mon May 11 10:02:15 2026] Launched impl_1...
+Run output will be captured here: /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:29 ; elapsed = 00:00:31 . Memory (MB): peak = 2206.637 ; gain = 293.102 ; free physical = 116660 ; free virtual = 126612
+# wait_on_run [get_runs impl_1]
+[Mon May 11 10:02:15 2026] Waiting for impl_1 to finish...
+
+*** Running vivado
+    with args -log top_wrapper.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source top_wrapper.tcl -notrace
+
+
+****** Vivado v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source top_wrapper.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingDataflowPartition_0_IODMA_hls_0_yaizr26j/project_StreamingDataflowPartition_0_IODMA_hls_0/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/vivado_stitch_proj_ka3muwi5/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_0_10nmlmxk'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_MVAU_hls_0_trhnjfvn/project_MVAU_hls_0/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_1_slv9ybgh'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_MVAU_hls_1_s4gsda1a/project_MVAU_hls_1/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_2_umvgiee7'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_MVAU_hls_2_ys1yrl6_/project_MVAU_hls_2/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_3_og97lwdi'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_MVAU_hls_3_qfenctk7/project_MVAU_hls_3/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_4_2rm82uvo'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_MVAU_hls_4_zu099i19/project_MVAU_hls_4/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingFIFO_rtl_5_4craho7e'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/vivado_stitch_proj_wg4xhwwt/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/e2405238/finn/finn-rtllib/memstream'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/code_gen_ipgen_StreamingDataflowPartition_2_IODMA_hls_0_wqjfs4ga/project_StreamingDataflowPartition_2_IODMA_hls_0/sol1/impl/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/tmp/finn_dev_e2405238/vivado_stitch_proj_s3gv_day/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/e2405238/Xilinx/Vivado/2022.2/data/ip'.
+Command: link_design -top top_wrapper -part xczu7ev-ffvc1156-2-e
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xczu7ev-ffvc1156-2-e
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_StreamingDataflowPartition_1_0/top_StreamingDataflowPartition_1_0.dcp' for cell 'top_i/StreamingDataflowPartition_1'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_idma0_0/top_idma0_0.dcp' for cell 'top_i/idma0'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_odma0_0/top_odma0_0.dcp' for cell 'top_i/odma0'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_rst_zynq_ps_100M_0/top_rst_zynq_ps_100M_0.dcp' for cell 'top_i/rst_zynq_ps_100M'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_smartconnect_0_0/top_smartconnect_0_0.dcp' for cell 'top_i/smartconnect_0'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_zynq_ps_0/top_zynq_ps_0.dcp' for cell 'top_i/zynq_ps'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_xbar_0/top_xbar_0.dcp' for cell 'top_i/axi_interconnect_0/xbar'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_auto_ds_0/top_auto_ds_0.dcp' for cell 'top_i/axi_interconnect_0/s00_couplers/auto_ds'
+INFO: [Project 1-454] Reading design checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_auto_pc_0/top_auto_pc_0.dcp' for cell 'top_i/axi_interconnect_0/s00_couplers/auto_pc'
+Netlist sorting complete. Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 3135.254 ; gain = 0.000 ; free physical = 112352 ; free virtual = 124114
+INFO: [Netlist 29-17] Analyzing 118291 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2022.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_zynq_ps_0/top_zynq_ps_0.xdc] for cell 'top_i/zynq_ps/inst'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_zynq_ps_0/top_zynq_ps_0.xdc] for cell 'top_i/zynq_ps/inst'
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_smartconnect_0_0/bd_0/ip/ip_1/bd_acc6_psr_aclk_0_board.xdc] for cell 'top_i/smartconnect_0/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_smartconnect_0_0/bd_0/ip/ip_1/bd_acc6_psr_aclk_0_board.xdc] for cell 'top_i/smartconnect_0/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_smartconnect_0_0/bd_0/ip/ip_1/bd_acc6_psr_aclk_0.xdc] for cell 'top_i/smartconnect_0/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_smartconnect_0_0/bd_0/ip/ip_1/bd_acc6_psr_aclk_0.xdc] for cell 'top_i/smartconnect_0/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_rst_zynq_ps_100M_0/top_rst_zynq_ps_100M_0_board.xdc] for cell 'top_i/rst_zynq_ps_100M/U0'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_rst_zynq_ps_100M_0/top_rst_zynq_ps_100M_0_board.xdc] for cell 'top_i/rst_zynq_ps_100M/U0'
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_rst_zynq_ps_100M_0/top_rst_zynq_ps_100M_0.xdc] for cell 'top_i/rst_zynq_ps_100M/U0'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_rst_zynq_ps_100M_0/top_rst_zynq_ps_100M_0.xdc] for cell 'top_i/rst_zynq_ps_100M/U0'
+Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_auto_ds_0/top_auto_ds_0_clocks.xdc] for cell 'top_i/axi_interconnect_0/s00_couplers/auto_ds/inst'
+Finished Parsing XDC File [/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.gen/sources_1/bd/top/ip/top_auto_ds_0/top_auto_ds_0_clocks.xdc] for cell 'top_i/axi_interconnect_0/s00_couplers/auto_ds/inst'
+INFO: [Project 1-1714] 61 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 3732.586 ; gain = 0.000 ; free physical = 111938 ; free virtual = 123700
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 405 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 76 instances
+  RAM16X1D => RAM32X1D (RAMD32(x2)): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 6 instances
+  RAM32M16 => RAM32M16 (RAMD32(x14), RAMS32(x2)): 127 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 2 instances
+  RAM64X1S => RAM64X1S (RAMS64E): 192 instances
+
+36 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:01:14 ; elapsed = 00:01:15 . Memory (MB): peak = 3732.586 ; gain = 2244.230 ; free physical = 111938 ; free virtual = 123700
+Command: opt_design -directive Explore
+INFO: [Vivado_Tcl 4-136] Directive used for opt_design is: Explore
+Attempting to get a license for feature 'Implementation' and/or device 'xczu7ev'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xczu7ev'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:02 . Memory (MB): peak = 3732.586 ; gain = 0.000 ; free physical = 111883 ; free virtual = 123645
+
+Starting Logic Optimization Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 1 Retarget
+INFO: [Opt 31-1287] Pulled Inverter top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/flow_control_loop_pipe_sequential_init_U/nf_2_reg_50411[6]_i_1 into driver instance top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/flow_control_loop_pipe_sequential_init_U/ap_CS_iter1_fsm[1]_i_2, which resulted in an inversion of 135 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/icmp_ln249_reg_6482[0]_i_1 into driver instance top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/ap_CS_iter1_fsm[1]_i_2, which resulted in an inversion of 9 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/icmp_ln290_reg_6591[0]_i_1 into driver instance top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/B_V_data_1_state[1]_i_2, which resulted in an inversion of 8 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/inElem_reg_6495[31]_i_1 into driver instance top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/flow_control_loop_pipe_sequential_init_U/B_V_data_1_state[1]_i_3, which resulted in an inversion of 4 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/axi_interconnect_0/s00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_READ.read_addr_inst/cmd_queue/inst/current_word_1[3]_i_1 into driver instance top_i/axi_interconnect_0/s00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_READ.read_addr_inst/cmd_queue/inst/s_axi_rvalid_INST_0_i_3, which resulted in an inversion of 2 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/axi_interconnect_0/s00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_WRITE.USE_SPLIT.write_resp_inst/first_mi_word_i_2 into driver instance top_i/axi_interconnect_0/s00_couplers/auto_ds/inst/gen_downsizer.gen_simple_downsizer.axi_downsizer_inst/USE_WRITE.USE_SPLIT.write_resp_inst/s_axi_bvalid_INST_0_i_1, which resulted in an inversion of 5 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/Mem2Stream_Batch_8u_3u_U0/grp_Mem2Stream_Batch_8u_3u_Pipeline_VITIS_LOOP_140_11_fu_92/icmp_ln140_reg_115[0]_i_1 into driver instance top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/Mem2Stream_Batch_8u_3u_U0/grp_Mem2Stream_Batch_8u_3u_Pipeline_VITIS_LOOP_140_11_fu_92/flow_control_loop_pipe_sequential_init_U/i_fu_50[1]_i_3, which resulted in an inversion of 4 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/Mem2Stream_Batch_8u_3u_U0/grp_Mem2Stream_Batch_8u_3u_Pipeline_VITIS_LOOP_140_1_fu_101/icmp_ln140_reg_115[0]_i_1__0 into driver instance top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/Mem2Stream_Batch_8u_3u_U0/grp_Mem2Stream_Batch_8u_3u_Pipeline_VITIS_LOOP_140_1_fu_101/flow_control_loop_pipe_sequential_init_U/i_fu_50[5]_i_3, which resulted in an inversion of 4 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/gmem_m_axi_U/bus_read/fifo_rctl/sect_addr_buf[63]_i_1 into driver instance top_i/idma0/inst/StreamingDataflowPartition_0_IODMA_hls_0/inst/gmem_m_axi_U/bus_read/fifo_rctl/state[1]_i_3, which resulted in an inversion of 18 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/smartconnect_0/inst/s01_entry_pipeline/s01_si_converter/inst/converter.wrap_narrow_inst/gen_thread_loop[0].r_payld_fifo/cmd_fifo/cmd_len_qq[7]_i_1 into driver instance top_i/smartconnect_0/inst/s01_entry_pipeline/s01_si_converter/inst/converter.wrap_narrow_inst/gen_thread_loop[0].r_payld_fifo/cmd_fifo/gen_pipelined.state[2]_i_3, which resulted in an inversion of 6 pins
+INFO: [Opt 31-1287] Pulled Inverter top_i/smartconnect_0/inst/s01_entry_pipeline/s01_si_converter/inst/converter.wrap_narrow_inst/w_payld_fifo/cmd_fifo/cmd_len_qq[7]_i_1__0 into driver instance top_i/smartconnect_0/inst/s01_entry_pipeline/s01_si_converter/inst/converter.wrap_narrow_inst/w_payld_fifo/cmd_fifo/gen_pipelined.state[2]_i_3__0, which resulted in an inversion of 6 pins
+INFO: [Opt 31-138] Pushed 85 inverter(s) to 3076 load pin(s).
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U6/MVAU_hls_1_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U7/MVAU_hls_1_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U8/MVAU_hls_1_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U9/MVAU_hls_1_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U11/MVAU_hls_1_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U13/MVAU_hls_1_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U15/MVAU_hls_1_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_1/StreamingDataflowPartition_1_MVAU_hls_1/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U17/MVAU_hls_1_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U6/MVAU_hls_2_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U7/MVAU_hls_2_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U8/MVAU_hls_2_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U9/MVAU_hls_2_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U11/MVAU_hls_2_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U13/MVAU_hls_2_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U15/MVAU_hls_2_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_2/StreamingDataflowPartition_1_MVAU_hls_2/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U17/MVAU_hls_2_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U6/MVAU_hls_3_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U7/MVAU_hls_3_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U8/MVAU_hls_3_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_24s_25_4_1_U9/MVAU_hls_3_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U11/MVAU_hls_3_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U13/MVAU_hls_3_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U15/MVAU_hls_3_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_3/StreamingDataflowPartition_1_MVAU_hls_3/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_2070/mac_muladd_16s_8ns_25s_26_4_1_U17/MVAU_hls_3_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_24s_25_4_1_U6/MVAU_hls_4_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_24s_25_4_1_U7/MVAU_hls_4_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_24s_25_4_1_U8/MVAU_hls_4_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_24s_25_4_1_U9/MVAU_hls_4_mac_muladd_16s_8ns_24s_25_4_1_DSP48_1_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_25s_26_4_1_U11/MVAU_hls_4_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_25s_26_4_1_U13/MVAU_hls_4_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_25s_26_4_1_U15/MVAU_hls_4_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-925] Fixed cascade connection for DSP: top_i/StreamingDataflowPartition_1/inst/StreamingDataflowPartition_1_MVAU_hls_4/StreamingDataflowPartition_1_MVAU_hls_4/inst/grp_Matrix_Vector_Activate_Stream_Batch_fu_30/mac_muladd_16s_8ns_25s_26_4_1_U17/MVAU_hls_4_mac_muladd_16s_8ns_25s_26_4_1_DSP48_3_U/p_reg_reg
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: 19f657170
+
+Time (s): cpu = 00:01:26 ; elapsed = 00:00:28 . Memory (MB): peak = 4792.133 ; gain = 952.227 ; free physical = 111374 ; free virtual = 123137
+INFO: [Opt 31-389] Phase Retarget created 285 cells and removed 654 cells
+INFO: [Opt 31-1021] In phase Retarget, 72 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 21 inverter(s) to 43 load pin(s).
+Phase 2 Constant propagation | Checksum: 152e62e1f
+
+Time (s): cpu = 00:01:29 ; elapsed = 00:00:32 . Memory (MB): peak = 4792.133 ; gain = 952.227 ; free physical = 111386 ; free virtual = 123148
+INFO: [Opt 31-389] Phase Constant propagation created 378 cells and removed 4545 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 87 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 1afa41037
+
+Time (s): cpu = 00:01:35 ; elapsed = 00:00:38 . Memory (MB): peak = 4792.133 ; gain = 952.227 ; free physical = 111344 ; free virtual = 123107
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 2030 cells
+INFO: [Opt 31-1021] In phase Sweep, 172 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 BUFG optimization
+INFO: [Opt 31-1077] Phase BUFG optimization inserted 0 global clock buffer(s) for CLOCK_LOW_FANOUT.
+Phase 4 BUFG optimization | Checksum: 1afa41037
+
+Time (s): cpu = 00:01:45 ; elapsed = 00:00:44 . Memory (MB): peak = 4824.148 ; gain = 984.242 ; free physical = 111384 ; free virtual = 123147
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 1afa41037
+
+Time (s): cpu = 00:01:46 ; elapsed = 00:00:44 . Memory (MB): peak = 4824.148 ; gain = 984.242 ; free physical = 111393 ; free virtual = 123156
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+INFO: [Opt 31-1555] control_set_opt supports Versal devices only, and device xczu7ev is unsupported
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: 1a39b5e26
+
+Time (s): cpu = 00:01:47 ; elapsed = 00:00:45 . Memory (MB): peak = 4824.148 ; gain = 984.242 ; free physical = 111404 ; free virtual = 123167
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 78 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |             285  |             654  |                                             72  |
+|  Constant propagation         |             378  |            4545  |                                             87  |
+|  Sweep                        |               0  |            2030  |                                            172  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                             78  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.91 ; elapsed = 00:00:00.91 . Memory (MB): peak = 4824.148 ; gain = 0.000 ; free physical = 111420 ; free virtual = 123183
+Ending Logic Optimization Task | Checksum: 169283634
+
+Time (s): cpu = 00:01:53 ; elapsed = 00:00:52 . Memory (MB): peak = 4824.148 ; gain = 984.242 ; free physical = 111420 ; free virtual = 123183
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00.06 ; elapsed = 00:00:00.06 . Memory (MB): peak = 4824.148 ; gain = 0.000 ; free physical = 111391 ; free virtual = 123154
+Ending Netlist Obfuscation Task | Checksum: 169283634
+
+Time (s): cpu = 00:00:00.12 ; elapsed = 00:00:00.12 . Memory (MB): peak = 4824.148 ; gain = 0.000 ; free physical = 111391 ; free virtual = 123154
+INFO: [Common 17-83] Releasing license: Implementation
+102 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:02:01 ; elapsed = 00:00:57 . Memory (MB): peak = 4824.148 ; gain = 1091.562 ; free physical = 111391 ; free virtual = 123154
+INFO: [Timing 38-480] Writing timing data to binary archive.
+INFO: [Common 17-1381] The checkpoint '/tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/impl_1/top_wrapper_opt.dcp' has been generated.
+write_checkpoint: Time (s): cpu = 00:00:50 ; elapsed = 00:00:27 . Memory (MB): peak = 4872.172 ; gain = 48.023 ; free physical = 111141 ; free virtual = 122986
+INFO: [runtcl-4] Executing : report_drc -file top_wrapper_drc_opted.rpt -pb top_wrapper_drc_opted.pb -rpx top_wrapper_drc_opted.rpx
+Command: report_drc -file top_wrapper_drc_opted.rpt -pb top_wrapper_drc_opted.pb -rpx top_wrapper_drc_opted.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file /tmp/finn_dev_e2405238/vivado_zynq_proj_l0k5_uyj/finn_zynq_link.runs/impl_1/top_wrapper_drc_opted.rpt.
+report_drc completed successfully
+report_drc: Time (s): cpu = 00:00:23 ; elapsed = 00:00:10 . Memory (MB): peak = 4888.180 ; gain = 16.008 ; free physical = 111022 ; free virtual = 122868
+Command: place_design -directive ExtraTimingOpt
+Attempting to get a license for feature 'Implementation' and/or device 'xczu7ev'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xczu7ev'
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 8 threads
+ERROR: [DRC UTLZ-1] Resource utilization: LUT as Logic over-utilized in Top Level Design (This design requires more LUT as Logic cells than are available in the target device. This design requires 281151 of such cell types but only 230400 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device. Please set tcl parameter "drc.disableLUTOverUtilError" to 1 to change this error to warning.)
+ERROR: [DRC UTLZ-1] Resource utilization: RAMB18 and RAMB36/FIFO over-utilized in Top Level Design (This design requires more RAMB18 and RAMB36/FIFO cells than are available in the target device. This design requires 832 of such cell types but only 624 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [DRC UTLZ-1] Resource utilization: RAMB36/FIFO over-utilized in Top Level Design (This design requires more RAMB36/FIFO cells than are available in the target device. This design requires 415 of such cell types but only 312 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [DRC UTLZ-1] Resource utilization: RAMB36E2 over-utilized in Top Level Design (This design requires more RAMB36E2 cells than are available in the target device. This design requires 415 of such cell types but only 312 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device.)
+ERROR: [DRC UTLZ-1] Resource utilization: Slice LUTs over-utilized in Top Level Design (This design requires more Slice LUTs cells than are available in the target device. This design requires 283268 of such cell types but only 230400 compatible sites are available in the target device. Please analyze your synthesis results and constraints to ensure the design is mapped to Xilinx primitives as expected. If so, please consider targeting a larger device. Please set tcl parameter "drc.disableLUTOverUtilError" to 1 to change this error to warning.)
+INFO: [Vivado_Tcl 4-198] DRC finished with 5 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+ERROR: [Vivado_Tcl 4-23] Error(s) found during DRC. Placer not run.
+INFO: [Common 17-83] Releasing license: Implementation
+116 Infos, 0 Warnings, 0 Critical Warnings and 6 Errors encountered.
+place_design failed
+place_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:05 . Memory (MB): peak = 4888.180 ; gain = 0.000 ; free physical = 111046 ; free virtual = 122893
+ERROR: [Common 17-39] 'place_design' failed due to earlier errors.
+
+INFO: [Common 17-206] Exiting Vivado at Mon May 11 11:52:42 2026...
+[Mon May 11 11:52:43 2026] impl_1 finished
+WARNING: [Vivado 12-13638] Failed runs(s) : 'impl_1'
+wait_on_runs: Time (s): cpu = 00:00:05 ; elapsed = 01:50:28 . Memory (MB): peak = 2206.637 ; gain = 0.000 ; free physical = 111047 ; free virtual = 122892
+# open_run impl_1
+ERROR: [Common 17-69] Command failed: Run 'impl_1' failed. Unable to open
+INFO: [Common 17-206] Exiting Vivado at Mon May 11 11:52:43 2026...
+^C
+e2405238@davinci-3:~/workspace/finn/Abfia_cormorant/output_mvdr_kr260$ 
+
+
+===================================================================================================================================================
+								W16A8
+===================================================================================================================================================
+FINN_XILINX_PATH=/home/e2405238/Xilinx2 FINN_XILINX_VERSION=2024.2 FINN_DOCKER_GPU=0 ./run-docker.sh
+
+FINN_XILINX_PATH=/home/e2405238/Xilinx FINN_XILINX_VERSION=2023.2 FINN_DOCKER_GPU=0 ./run-docker.sh
+
+I have no name!@finn_dev_e2405238:/home/e2405238/finn/Abfia_cormorant$ python3 -c "from finn.util.basic import pynq_part_map; print(list(pynq_part_map.keys()))"
+['Ultra96', 'Ultra96-V2', 'Pynq-Z1', 'Pynq-Z2', 'ZCU102', 'ZCU104', 'ZCU111', 'RFSoC2x2', 'RFSoC4x2', 'KV260_SOM']
+
+I have no name!@finn_dev_e2405238:/home/e2405238/finn/Abfia_cormorant$ python3 -c "from finn.util.basic import alveo_part_map; print(list(alveo_part_map.keys()))"
+['U50', 'U200', 'U250', 'U280', 'U55C']
+
+
+cfg = build_cfg.DataflowBuildConfig(
+    output_dir          = "output_mvdr_zcu104", 
+    #output_dir          = "output_mvdr_KR260",
+    minimize_bit_width = True,
+    board               = "ZCU104",              # <--- 
+    #board               = "KV260_SOM",          # <---
+    fpga_part           = "xczu7ev-ffvc1156-2-e",  # pour le ZCU104
+    #fpga_part           = "xczu28dr-ffvg1517-2-e", # La part exacte de la ZCU111
+    synth_clk_period_ns = 10.0,
+    folding_config_file = "folding_config_16pack.json",
+    generate_outputs    = [build_cfg.DataflowOutputType.BITFILE, build_cfg.DataflowOutputType.PYNQ_DRIVER],
+    shell_flow_type     = build_cfg.ShellFlowType.VIVADO_ZYNQ, 
+    steps=[
+        build_steps.step_qonnx_to_finn,                 # [1/15]  
+        build_steps.step_tidy_up,                       # [2/15] 
+        build_steps.step_streamline,                    # [3/15] 
+        build_steps.step_convert_to_hw,                 # [4/15] 
+        build_steps.step_create_dataflow_partition,     # [5/15] 
+        build_steps.step_specialize_layers,             # [6/15] 
+        build_steps.step_apply_folding_config,          # [7/15] 
+        step_robust_fix_threshold_int32,                # [8/15] 
+        build_steps.step_minimize_bit_width,
+        build_steps.step_hw_codegen,                    # [1015] 
+        build_steps.step_hw_ipgen,                      # [11/15] 
+        build_steps.step_set_fifo_depths,               # [12/15] 
+        build_steps.step_create_stitched_ip,            # [13/15] 
+        step_make_pynq_driver_from_parent,              # [14/15] 
+        build_steps.step_synthesize_bitfile             # [15/15] 
+    ]
+)
+cat << 'EOF' > run_step_synthesize_bitfile.tcl
+# 1. Ouverture du projet et du schéma
+open_project finn_zynq_link.xpr
+open_bd_design [get_files *.bd]
+# 2. Suppression de l'ancien interconnect AXI obsolète
+catch {delete_bd_objs [get_bd_cells /axi_interconnect_0]}
+# 3. Ajout d'un SmartConnect tout neuf (on l'appelle smartconnect_axi)
+set s_connect [create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 smartconnect_axi]
+set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI {1}] $s_connect
+# 4. Connexions manuelles avec les BONS noms d'instances (/zynq_ps)
+connect_bd_net [get_bd_pins /zynq_ps/pl_clk0] [get_bd_pins /smartconnect_axi/aclk]
+connect_bd_net [get_bd_pins /rst_zynq_ps_100M/interconnect_aresetn] [get_bd_pins /smartconnect_axi/aresetn]
+# 5. Connexion des bus de contrôle (Master CPU -> SmartConnect -> Slave FINN)
+connect_bd_intf_net [get_bd_intf_pins /zynq_ps/M_AXI_HPM0_FPD] [get_bd_intf_pins /smartconnect_axi/S00_AXI]
+connect_bd_intf_net [get_bd_intf_pins /smartconnect_axi/M00_AXI] [get_bd_intf_pins /StreamingDataflowPartition_1/s_axi_control]
+# 6. Mappage automatique des adresses pour le nouveau bloc
+assign_bd_address
+# 7. Validation et Sauvegarde du schéma corrigé
+validate_bd_design -force
+save_bd_design
+# 8. Reset et lancement de la synthèse globale jusqu'au Bitstream
+reset_runs [get_runs *synth_*]
+reset_run impl_1
+generate_target all [get_files *.bd]
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+wait_on_run impl_1
+puts "=== Fin de la génération du Bitstream ==="
+EOF
+
+rm -rf /tmp/finn_dev_e2405238/*
+rm -rf output_mvdr_U50
+
