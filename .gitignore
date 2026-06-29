@@ -1,0 +1,7 @@
+# Ignorer les fichiers de crash/dump
+core.*
+# Ignorer tous les fichiers de données volumineux
+*.dat
+*.bin
+*.npy
+
